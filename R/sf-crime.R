@@ -65,7 +65,8 @@ counts$Date <- as.Date(counts$Date)
 colnames(counts)[1] <- "Date"
 counts$MonthBreak <- as.Date(cut(counts$Date, breaks = "month"))
 counts$WeekBreak <- as.Date(cut(counts$Date, breaks = "week"))
-ggplot(counts, aes(Date, Freq)) + stat_summary(fun.y = sum, geom = "point")
+#ggplot(counts, aes(Date, Freq)) + stat_summary(fun.y = sum, geom = "point")
+ggplot(counts, aes(WeekBreak, Freq)) + stat_summary(fun.y = sum, geom = "point") + stat_summary(fun.y = sum, geom = "line") + scale_x_date(breaks = "1 year", labels = date_format("%Y"))
 
 par(las=2) # make label text perpendicular to axis
 
