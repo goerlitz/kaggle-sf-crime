@@ -1,5 +1,6 @@
 library(ggplot2)
 library(lattice)
+library(scales)
 
 # LOAD DATA
 train <- read.csv("../data/train.csv", header = TRUE)
@@ -57,6 +58,14 @@ xyplot(Freq ~ Year | Category, data = counts, type = c("p","r"),
        xlab = "Year", ylab = "Frequency", main = "Number of Crimes per Year",
        scales=list(x=list(rot=90))
        )
+
+# plot by week counts
+counts <- as.data.frame(table(train$Date))
+counts$Date <- as.Date(counts$Date)
+colnames(counts)[1] <- "Date"
+counts$MonthBreak <- as.Date(cut(counts$Date, breaks = "month"))
+counts$WeekBreak <- as.Date(cut(counts$Date, breaks = "week"))
+ggplot(counts, aes(Date, Freq)) + stat_summary(fun.y = sum, geom = "point")
 
 par(las=2) # make label text perpendicular to axis
 
