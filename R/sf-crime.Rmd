@@ -6,16 +6,16 @@ output: html_document
 [San Francisco crime dataset from Kaggle](https://www.kaggle.com/c/???)
 
 ```{r}
-library(ggplot2)
+library(ggplot2)    # nicer graphs
+library(data.table) # fast data.frame
 #library(scales)
-library(data.table)
 ```
 
 ```{r, echo = FALSE}
 file <- gzfile("../data/train.csv.gz")
 
 start.time <- Sys.time()
-train <- fread("zcat ../data/train.csv.gz", header = TRUE)
+train <- fread("xzcat ../data/train.csv.xz", header = TRUE)
 end.time <- Sys.time()
 
 cat(sprintf("Loaded %d rows in %.1f seconds.\n", nrow(train), end.time - start.time))
