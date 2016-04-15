@@ -1,0 +1,42 @@
+---
+title: "SF-crime"
+output: html_document
+---
+
+[San Francisco crime dataset from Kaggle](https://www.kaggle.com/c/???)
+
+```{r}
+library(ggplot2)
+#library(scales)
+library(data.table)
+```
+
+```{r, echo = FALSE}
+file <- gzfile("../data/train.csv.gz")
+
+start.time <- Sys.time()
+train <- fread("zcat ../data/train.csv.gz", header = TRUE)
+end.time <- Sys.time()
+
+cat(sprintf("Loaded %d rows in %.1f seconds.\n", nrow(train), end.time - start.time))
+```
+
+## Data Cleansing
+
+```{r}
+train$Dates <- as.POSIXct(train$Dates, "PST")
+train$Year  <- as.numeric(format(train$Dates, "%Y"))
+
+train <- subset(train, Y < 40)
+
+train <- subset(train, Year == 2010)
+
+str(train)
+```
+
+
+```{r, echo = FALSE}
+ggplot(train, aes(x = X, y = Y, col = PdDistrict)) + geom_point(size = 0.1, alpha = 0.5)
+```
+
+
