@@ -22,6 +22,7 @@ output: html_document
 library(ggplot2)    # Data visualization
 library(data.table) # Much faster data reading
 library(dplyr)      # Data aggregation etc.
+library(scales)     # Plot scaling
 ```
 
 ```{r, echo = FALSE}
@@ -54,12 +55,16 @@ train.agg <- merge(train.agg, allcatdates, by=c("Date", "Category"), all = TRUE)
 train.agg[is.na(train.agg$count)]$count <- 0
 
 # plot montly count per Category
+breaks <- seq(as.POSIXct("2003-01-01"), as.POSIXct("2015-01-01"), by="2 years")
 ggplot(train.agg, aes(x = Date, y = count, group = Category, col = Category)) +
   geom_line(size=0.2) +
   facet_wrap(~Category, ncol = 5, scales = "free_y") +
-  theme(legend.position="none", axis.text=element_text(size=5), strip.text = element_text(size = 5)) +
+  theme(legend.position="none",
+        axis.text=element_text(size=5),
+        strip.text = element_text(size = 5)) +
   scale_y_continuous(limits = c(0, NA)) +
-  labs(title="Frequency of Events per Category")
+  scale_x_datetime(breaks = breaks, labels = format(breaks, "%Y")) +
+  labs(title="Monthly Frequency of Crime Events per Category")
 ```
 
 ### Location of Events in 2010
